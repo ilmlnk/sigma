@@ -1,12 +1,6 @@
 package com.company.lesson2;
 
-import java.util.Locale;
-
 public class MultiplicationCarField {
-
-    public MultiplicationCarField() {
-
-    }
 
     public double operationMultiply(String fieldCar, Car car, double constant) {
             switch (fieldCar) {

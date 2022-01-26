@@ -19,8 +19,9 @@ public class Main {
         for (Car car : cars) System.out.println(car);
         wrapper();
 
-        System.out.println("Result: " + mp.operationMultiply("price".toLowerCase(Locale.ROOT),
-                cars[random.nextInt(cars.length)], 10));
+        System.out.println("Result: " + new DecimalFormat("#0.00").format(
+                mp.operationMultiply("price".toLowerCase(Locale.ROOT),
+                cars[random.nextInt(cars.length)], 10)));
     }
 
     public static void wrapper() {
