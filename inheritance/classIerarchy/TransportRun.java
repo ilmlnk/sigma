@@ -73,28 +73,34 @@ public class TransportRun {
         Autobus autobus = new Autobus("Bogdan", random.nextInt(100, 1000),
                 random.nextInt(10, 50), random.nextInt(600, 1000),
                 random.nextDouble(400, 700), random.nextInt(1, 3),
-                "", random.nextInt(5000, 15000));
+                generateSerialNumber(), random.nextInt(5000, 15000));
         Car car = new Car("BMW", random.nextInt(100, 1000),
                 random.nextInt(10, 50), random.nextInt(600, 1000),
                 random.nextDouble(400, 700), random.nextInt(1, 3),
-                random.nextInt(1, 4), random.nextInt(5000, 15000));
+                generateSerialNumber(), random.nextInt(5000, 15000));
         CargoCar cargoCar = new CargoCar("Cargo", random.nextInt(100, 1000),
                 random.nextInt(10, 50), random.nextInt(600, 1000),
                 random.nextDouble(400, 700), random.nextInt(1, 3),
-                random.nextInt(1, 4), random.nextInt(5000, 15000));
+                generateSerialNumber(), random.nextInt(5000, 15000));
 
         wrapper();
-        System.out.println();
+        System.out.println(autobus);
         wrapper();
-        System.out.println();
+        System.out.println(car);
         wrapper();
-        System.out.println();
+        System.out.println(cargoCar);
         wrapper();
 
     }
 
     public static String generateSerialNumber() {
-        
+        Random random = new Random();
+
+        StringBuilder serialNumber = new StringBuilder();
+        for(int i = 0; i < 16; i++) {
+            serialNumber.insert(i, random.nextInt(0, 9));
+        }
+        return serialNumber.toString();
     }
 
     public static void wrapper() {
