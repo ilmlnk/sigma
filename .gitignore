@@ -1,0 +1,14 @@
+
+inheritance/classIerarchy/Auto.java
+inheritance/classIerarchy/auto/Autobus.java
+inheritance/classIerarchy/auto/Car.java
+inheritance/classIerarchy/auto/CargoCar.java
+inheritance/classIerarchy/Plane.java
+inheritance/classIerarchy/plane/CargoPlane.java
+inheritance/classIerarchy/plane/Fighter.java
+inheritance/classIerarchy/plane/PassengerPlane.java
+inheritance/classIerarchy/Ship.java
+inheritance/classIerarchy/ship/CargoShip.java
+inheritance/classIerarchy/ship/PassengerShip.java
+inheritance/classIerarchy/ship/Tow.java
+inheritance/classIerarchy/Transport.java
