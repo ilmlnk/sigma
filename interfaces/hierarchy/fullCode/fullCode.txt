@@ -1,0 +1,1598 @@
+import java.util.Random;
+
+public class Autobus extends Auto implements BoardingPassengers {
+    private int amountPassengers;
+    private int countPassengers;
+    private Passenger[] passengers = new Passenger[amountPassengers];
+
+    public Autobus(String name, int fuelConsumption, int fuelCapacity, int maxSpeed, double speed,
+                   int driverPlaces, String serialNumber, int amountPassengers) {
+        super(name, fuelConsumption, fuelCapacity, maxSpeed, speed, driverPlaces, serialNumber);
+
+        this.amountPassengers = amountPassengers;
+        this.countPassengers = 0;
+    }
+
+    public int getAmountPassengers() {
+        return amountPassengers;
+    }
+
+    public int getCountPassengers() {
+        return countPassengers;
+    }
+
+    public void setCountPassengers(int countPassengers) {
+        this.countPassengers = countPassengers;
+    }
+
+    public Passenger[] getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(Passenger[] passengers) {
+        this.passengers = passengers;
+    }
+
+    public void setAmountPassengers(int amountPassengers) {
+        this.amountPassengers = amountPassengers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Autobus)) return false;
+        Autobus autobus = (Autobus) o;
+        return amountPassengers == autobus.amountPassengers;
+    }
+
+    @Override
+    public boolean accelerate(int acceleratedSpeed) {
+        if (super.speed < 0) return false;
+        else if (super.speed > super.maxSpeed) return false;
+        else {
+            super.speed += acceleratedSpeed;
+            System.out.println("The speed has been increased by " + acceleratedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean brake(int reducedSpeed) {
+        if (super.speed < 0) return false;
+        else {
+            super.speed -= reducedSpeed;
+            System.out.println("The speed has been decreased by " + reducedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age) {
+        int count = 0;
+        if (count < drivers.length) {
+            Driver driver = new Driver(name, surname, patronymic, driverCategory, age);
+            drivers[count] = driver;
+            ++count;
+            System.out.println("The driver was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addPassenger(String name, String surname, String patronymic, int age) {
+        if (countPassengers < passengers.length) {
+            Passenger passenger = new Passenger(name, surname, patronymic, age);
+            passengers[countPassengers] = passenger;
+            ++countPassengers;
+            System.out.println("The passenger was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deletePassenger(int id) {
+        for (int i = 0; i < passengers.length - 1; i++) {
+            if (++i == id) {
+                passengers[i] = new Passenger();
+                System.out.println("The passenger was removed successfully.");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Autobus{" +
+                "serialNumber='" + serialNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                ", amountPassengers=" + amountPassengers +
+                '}';
+    }
+
+
+}
+
+public class Car extends Auto {
+    private int accelerationTime;
+
+    public Car(String name, int fuelConsumption, int fuelCapacity, int maxSpeed, double speed,
+               int driverPlaces, String serialNumber, int accelerationTime) {
+        super(name, fuelConsumption, fuelCapacity, maxSpeed, speed, driverPlaces, serialNumber);
+
+        this.accelerationTime = accelerationTime;
+    }
+
+    public int getAccelerationTime() {
+        return accelerationTime;
+    }
+
+    public void setAccelerationTime(int accelerationTime) {
+        this.accelerationTime = accelerationTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Car)) return false;
+        Car car = (Car) o;
+        return accelerationTime == car.accelerationTime;
+    }
+
+    @Override
+    public boolean accelerate(int acceleratedSpeed) {
+        if (super.speed < 0) return false;
+        else if (super.speed > super.maxSpeed) return false;
+        else {
+            super.speed += acceleratedSpeed;
+            System.out.println("The speed has been increased by " + acceleratedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean brake(int reducedSpeed) {
+        if (super.speed < 0) return false;
+        else {
+            super.speed -= reducedSpeed;
+            System.out.println("The speed has been decreased by " + reducedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age) {
+        int count = 0;
+        if (count < drivers.length) {
+            Driver driver = new Driver(name, surname, patronymic, driverCategory, age);
+            drivers[count] = driver;
+            ++count;
+            System.out.println("The driver was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "serialNumber='" + serialNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                ", accelerationTime=" + accelerationTime +
+                '}';
+    }
+}
+
+
+public class CargoCar extends Auto implements LoadingCargo {
+    private int loadCapacity;
+    private static double currentLoadCapacity;
+
+    public CargoCar(String name, int fuelConsumption, int fuelCapacity, int maxSpeed, double speed,
+                    int driverPlaces, String serialNumber, int loadCapacity) {
+        super(name, fuelConsumption, fuelCapacity, maxSpeed, speed, driverPlaces, serialNumber);
+
+        this.loadCapacity = loadCapacity;
+        currentLoadCapacity = 0;
+    }
+
+    public int getLoadCapacity() {
+        return loadCapacity;
+    }
+
+    public void setLoadCapacity(int loadCapacity) {
+        this.loadCapacity = loadCapacity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CargoCar)) return false;
+        CargoCar cargoCar = (CargoCar) o;
+        return loadCapacity == cargoCar.loadCapacity;
+    }
+
+    @Override
+    public boolean accelerate(int acceleratedSpeed) {
+        if (super.speed < 0) return false;
+        else if (super.speed > super.maxSpeed) return false;
+        else {
+            super.speed += acceleratedSpeed;
+            System.out.println("The speed has been increased by " + acceleratedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean brake(int reducedSpeed) {
+        if (super.speed < 0) return false;
+        else {
+            super.speed -= reducedSpeed;
+            System.out.println("The speed has been decreased by " + reducedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age) {
+        int count = 0;
+        if (count < drivers.length) {
+            Driver driver = new Driver(name, surname, patronymic, driverCategory, age);
+            drivers[count] = driver;
+            ++count;
+            System.out.println("The driver was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addCargo(double kg) {
+        if (currentLoadCapacity < loadCapacity) {
+            currentLoadCapacity += kg;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "CargoCar{" +
+                "serialNumber='" + serialNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                ", loadCapacity=" + loadCapacity +
+                '}';
+    }
+}
+
+public class Driver {
+    private static int id;
+    private String name;
+    private String surname;
+    private String patronymic;
+    private String driverCategory;
+    private int age;
+
+    public Driver() {
+        this.name = null;
+        this.surname = null;
+        this.patronymic = null;
+        this.driverCategory = null;
+        this.age = 0;
+    }
+
+    public Driver(String name, String surname, String patronymic, String driverCategory, int age) {
+        invokeID();
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.driverCategory = driverCategory;
+        this.age = age;
+    }
+
+    private void invokeID() {
+        id++;
+    }
+
+    public int getID() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
+    }
+
+    public String getDriverCategory() {
+        return driverCategory;
+    }
+
+    public void setDriverCategory(String driverCategory) {
+        this.driverCategory = driverCategory;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Driver{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", driverCategory='" + driverCategory + '\'' +
+                ", age=" + age +
+                '}';
+    }
+}
+
+public class Passenger {
+    private static int id;
+    private String name;
+    private String surname;
+    private String patronymic;
+    private int age;
+
+    public Passenger() {
+        this.name = null;
+        this.surname = null;
+        this.patronymic = null;
+        this.age = 0;
+    }
+
+    public Passenger(String name, String surname, String patronymic, int age) {
+        invokeID();
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.age = age;
+    }
+
+    private void invokeID() {
+        id++;
+    }
+
+    public int getID() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Passenger{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", age=" + age +
+                '}';
+    }
+}
+
+public class CargoPlane extends Plane implements LoadingCargo {
+    private int loadCapacity;
+    private static double currentLoadCapacity;
+
+    public CargoPlane(String name, int fuelConsumption, int fuelCapacity, int maxSpeed, double speed,
+                      int driverPlaces, int amountEngines, int loadCapacity) {
+        super(name, fuelConsumption, fuelCapacity, maxSpeed, speed, driverPlaces, amountEngines);
+
+        this.loadCapacity = loadCapacity;
+    }
+
+    public int getLoadCapacity() {
+        return loadCapacity;
+    }
+
+    public void setLoadCapacity(int loadCapacity) {
+        this.loadCapacity = loadCapacity;
+    }
+
+    public static double getCurrentLoadCapacity() {
+        return currentLoadCapacity;
+    }
+
+    public static void setCurrentLoadCapacity(double currentLoadCapacity) {
+        CargoPlane.currentLoadCapacity = currentLoadCapacity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CargoPlane)) return false;
+        CargoPlane that = (CargoPlane) o;
+        return loadCapacity == that.loadCapacity;
+    }
+
+    @Override
+    public boolean accelerate(int acceleratedSpeed) {
+        if (super.speed < 0) return false;
+        else if (super.speed > super.maxSpeed) return false;
+        else {
+            super.speed += acceleratedSpeed;
+            System.out.println("The speed has been increased by " + acceleratedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean brake(int reducedSpeed) {
+        if (super.speed < 0) return false;
+        else {
+            super.speed -= reducedSpeed;
+            System.out.println("The speed has been decreased by " + reducedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age) {
+        int count = 0;
+        if (count < drivers.length) {
+            Driver driver = new Driver(name, surname, patronymic, driverCategory, age);
+            drivers[count] = driver;
+            ++count;
+            System.out.println("The driver was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addCargo(double kg) {
+        if (currentLoadCapacity < loadCapacity) {
+            currentLoadCapacity += kg;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "CargoPlane{" +
+                "amountEngines=" + amountEngines +
+                ", name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                ", loadCapacity=" + loadCapacity +
+                '}';
+    }
+}
+
+import java.util.Objects;
+
+public class Fighter extends Plane {
+    private String weapon;
+    private int countDrivers;
+    private int amountWarhead;
+
+    public Fighter(String name, int fuelConsumption, int fuelCapacity, int maxSpeed, double speed,
+                   int driverPlaces, int amountEngines, String weapon, int amountWarhead) {
+
+        super(name, fuelConsumption, fuelCapacity, maxSpeed, speed, driverPlaces, amountEngines);
+
+        this.weapon = weapon;
+        this.amountWarhead = amountWarhead;
+        this.countDrivers = 0;
+    }
+
+    public String getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(String weapon) {
+        this.weapon = weapon;
+    }
+
+    public int getAmountWarhead() {
+        return amountWarhead;
+    }
+
+    public void setAmountWarhead(int amountWarhead) {
+        this.amountWarhead = amountWarhead;
+    }
+
+    public int getCountDrivers() {
+        return countDrivers;
+    }
+
+    public void setCountDrivers(int countDrivers) {
+        this.countDrivers = countDrivers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Fighter)) return false;
+        Fighter fighter = (Fighter) o;
+        return amountWarhead == fighter.amountWarhead && Objects.equals(weapon, fighter.weapon);
+    }
+
+    @Override
+    public boolean accelerate(int acceleratedSpeed) {
+        if (super.speed < 0) return false;
+        else if (super.speed > super.maxSpeed) return false;
+        else {
+            super.speed += acceleratedSpeed;
+            System.out.println("The speed has been increased by " + acceleratedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean brake(int reducedSpeed) {
+        if (super.speed < 0) return false;
+        else {
+            super.speed -= reducedSpeed;
+            System.out.println("The speed has been decreased by " + reducedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age) {
+        if (countDrivers < drivers.length) {
+            Driver driver = new Driver(name, surname, patronymic, driverCategory, age);
+            drivers[countDrivers] = driver;
+            ++countDrivers;
+            System.out.println("The driver was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Fighter{" +
+                "amountEngines=" + amountEngines +
+                ", name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                ", weapon='" + weapon + '\'' +
+                ", amountWarhead=" + amountWarhead +
+                '}';
+    }
+}
+
+public class PassengerPlane extends Plane implements BoardingPassengers {
+    private int amountPassengers;
+    private Passenger[] passengers;
+    private int countPassengers;
+    private int countDrivers;
+
+    public PassengerPlane(String name, int fuelConsumption, int fuelCapacity, int maxSpeed, double speed,
+                          int driverPlaces, int amountEngines, int amountPassengers) {
+        super(name, fuelConsumption, fuelCapacity, maxSpeed, speed, driverPlaces, amountEngines);
+
+        this.amountPassengers = amountPassengers;
+        this.countPassengers = 0;
+        this.countDrivers = 0;
+    }
+
+    public int getAmountPassengers() {
+        return amountPassengers;
+    }
+
+    public void setAmountPassengers(int amountPassengers) {
+        this.amountPassengers = amountPassengers;
+    }
+
+    public Passenger[] getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(Passenger[] passengers) {
+        this.passengers = passengers;
+    }
+
+    public int getCountPassengers() {
+        return countPassengers;
+    }
+
+    public void setCountPassengers(int countPassengers) {
+        this.countPassengers = countPassengers;
+    }
+
+    public int getCountDrivers() {
+        return countDrivers;
+    }
+
+    public void setCountDrivers(int countDrivers) {
+        this.countDrivers = countDrivers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PassengerPlane)) return false;
+        PassengerPlane that = (PassengerPlane) o;
+        return amountPassengers == that.amountPassengers;
+    }
+
+    @Override
+    public boolean accelerate(int acceleratedSpeed) {
+        if (super.speed < 0) return false;
+        else if (super.speed > super.maxSpeed) return false;
+        else {
+            super.speed += acceleratedSpeed;
+            System.out.println("The speed has been increased by " + acceleratedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean brake(int reducedSpeed) {
+        if (super.speed < 0) return false;
+        else {
+            super.speed -= reducedSpeed;
+            System.out.println("The speed has been decreased by " + reducedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age) {
+        int count = 0;
+        if (count < drivers.length) {
+            Driver driver = new Driver(name, surname, patronymic, driverCategory, age);
+            drivers[count] = driver;
+            ++count;
+            System.out.println("The driver was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addPassenger(String name, String surname, String patronymic, int age) {
+        if (countPassengers < passengers.length) {
+            Passenger passenger = new Passenger(name, surname, patronymic, age);
+            passengers[countPassengers] = passenger;
+            ++countPassengers;
+            System.out.println("The passenger was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deletePassenger(int id) {
+        for (int i = 0; i < passengers.length - 1; i++) {
+            if (++i == id) {
+                passengers[i] = new Passenger();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "PassengerPlane{" +
+                "amountEngines=" + amountEngines +
+                ", name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                ", amountPassengers=" + amountPassengers +
+                '}';
+    }
+
+
+}
+
+public class CargoShip extends Ship implements LoadingCargo {
+    private int loadCapacity;
+    private static double currentLoadCapacity;
+
+    public CargoShip(String name, int fuelConsumption, int fuelCapacity, int maxSpeed, double speed,
+                     int driverPlaces, int amountEngines, int loadCapacity) {
+        super(name, fuelConsumption, fuelCapacity, maxSpeed, speed, driverPlaces, amountEngines);
+
+        this.loadCapacity = loadCapacity;
+    }
+
+    public int getLoadCapacity() {
+        return loadCapacity;
+    }
+
+    public void setLoadCapacity(int loadCapacity) {
+        this.loadCapacity = loadCapacity;
+    }
+
+    public static double getCurrentLoadCapacity() {
+        return currentLoadCapacity;
+    }
+
+    public static void setCurrentLoadCapacity(double currentLoadCapacity) {
+        CargoShip.currentLoadCapacity = currentLoadCapacity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CargoShip)) return false;
+        CargoShip cargoShip = (CargoShip) o;
+        return loadCapacity == cargoShip.loadCapacity;
+    }
+
+    @Override
+    public boolean accelerate(int acceleratedSpeed) {
+        if (super.speed < 0) return false;
+        else if (super.speed > super.maxSpeed) return false;
+        else {
+            super.speed += acceleratedSpeed;
+            System.out.println("The speed has been increased by " + acceleratedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean brake(int reducedSpeed) {
+        if (super.speed < 0) return false;
+        else {
+            super.speed -= reducedSpeed;
+            System.out.println("The speed has been decreased by " + reducedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age) {
+        int count = 0;
+        if (count < drivers.length) {
+            Driver driver = new Driver(name, surname, patronymic, driverCategory, age);
+            drivers[count] = driver;
+            ++count;
+            System.out.println("The driver was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteDriver(int id) {
+        for (int i = 1; i < drivers.length; i++) {
+            if (++i == id) {
+                drivers[i] = new Driver();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addCargo(double kg) {
+        if (currentLoadCapacity < loadCapacity) {
+            currentLoadCapacity += kg;
+            return true;
+        }
+        return false;
+    }
+    @Override
+    public String toString() {
+        return "CargoShip{" +
+                "amountEngines=" + amountEngines +
+                ", name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                ", loadCapacity=" + loadCapacity +
+                '}';
+    }
+
+
+}
+
+public class PassengerShip extends Ship implements BoardingPassengers {
+    private int amountPassengers;
+    private int countDrivers;
+    private int countPassengers;
+    private Passenger[] passengers = new Passenger[amountPassengers];
+
+    public PassengerShip(String name, int fuelConsumption, int fuelCapacity, int maxSpeed, double speed,
+                         int driverPlaces, int amountEngines, int amountPassengers) {
+        super(name, fuelConsumption, fuelCapacity, maxSpeed, speed, driverPlaces, amountEngines);
+
+        this.amountPassengers = amountPassengers;
+        this.countDrivers = 0;
+        this.countPassengers = 0;
+    }
+
+    public int getCountDrivers() {
+        return countDrivers;
+    }
+
+    public void setCountDrivers(int countDrivers) {
+        this.countDrivers = countDrivers;
+    }
+
+    public int getCountPassengers() {
+        return countPassengers;
+    }
+
+    public void setCountPassengers(int countPassengers) {
+        this.countPassengers = countPassengers;
+    }
+
+    public Passenger[] getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(Passenger[] passengers) {
+        this.passengers = passengers;
+    }
+
+    public int getAmountPassengers() {
+        return amountPassengers;
+    }
+
+    public void setAmountPassengers(int amountPassengers) {
+        this.amountPassengers = amountPassengers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PassengerShip)) return false;
+        PassengerShip that = (PassengerShip) o;
+        return amountPassengers == that.amountPassengers;
+    }
+
+    @Override
+    public boolean accelerate(int acceleratedSpeed) {
+        if (super.speed < 0) return false;
+        else if (super.speed > super.maxSpeed) return false;
+        else {
+            super.speed += acceleratedSpeed;
+            System.out.println("The speed has been increased by " + acceleratedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean brake(int reducedSpeed) {
+        if (super.speed < 0) return false;
+        else {
+            super.speed -= reducedSpeed;
+            System.out.println("The speed has been decreased by " + reducedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age) {
+        int count = 0;
+        if (count < drivers.length) {
+            Driver driver = new Driver(name, surname, patronymic, driverCategory, age);
+            drivers[count] = driver;
+            ++count;
+            System.out.println("The driver was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteDriver(int id) {
+        for (int i = 0; i < drivers.length - 1; i++) {
+            if (id == ++i) {
+                drivers[i] = new Driver();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "PassengerShip{" +
+                "amountEngines=" + amountEngines +
+                ", name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                ", amountPassengers=" + amountPassengers +
+                '}';
+    }
+
+    @Override
+    public boolean addPassenger(String name, String surname, String patronymic, int age) {
+        if (countPassengers < passengers.length) {
+            Passenger passenger = new Passenger(name, surname, patronymic, age);
+            passengers[countPassengers] = passenger;
+            countPassengers++;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deletePassenger(int id) {
+        for (int i = 1; i < passengers.length; i++) {
+            if (i == id) {
+                passengers[i-1] = new Passenger();
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+
+public class Tow extends Ship implements LoadingCargo {
+    private int loadShip;
+    private String typeCargo;
+    private static double currentLoadCapacity;
+
+    public Tow(String name, int fuelConsumption, int fuelCapacity, int maxSpeed, double speed,
+               int driverPlaces, int amountEngines, int loadShip, String typeCargo) {
+        super(name, fuelConsumption, fuelCapacity, maxSpeed, speed, driverPlaces, amountEngines);
+
+        this.loadShip = loadShip;
+        this.typeCargo = typeCargo;
+    }
+
+    public int getLoadShip() {
+        return loadShip;
+    }
+
+    public void setLoadShip(int loadShip) {
+        this.loadShip = loadShip;
+    }
+
+    public String getTypeCargo() {
+        return typeCargo;
+    }
+
+    public void setTypeCargo(String typeCargo) {
+        this.typeCargo = typeCargo;
+    }
+
+    public static double getCurrentLoadCapacity() {
+        return currentLoadCapacity;
+    }
+
+    public static void setCurrentLoadCapacity(double currentLoadCapacity) {
+        Tow.currentLoadCapacity = currentLoadCapacity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tow)) return false;
+        Tow tow = (Tow) o;
+        return loadShip == tow.loadShip;
+    }
+
+    @Override
+    public boolean accelerate(int acceleratedSpeed) {
+        if (super.speed < 0) return false;
+        else if (super.speed > super.maxSpeed) return false;
+        else {
+            super.speed += acceleratedSpeed;
+            System.out.println("The speed has been increased by " + acceleratedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean brake(int reducedSpeed) {
+        if (super.speed < 0) return false;
+        else {
+            super.speed -= reducedSpeed;
+            System.out.println("The speed has been decreased by " + reducedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age) {
+        int count = 0;
+        if (count < drivers.length) {
+            Driver driver = new Driver(name, surname, patronymic, driverCategory, age);
+            drivers[count] = driver;
+            ++count;
+            System.out.println("The driver was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteDriver(int id) {
+        for (int i = 0; i < drivers.length - 1; i++) {
+            if (id == ++i) {
+                drivers[i] = new Driver();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addCargo(double kg) {
+        if (currentLoadCapacity < loadShip) {
+            currentLoadCapacity += kg;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Tow{" +
+                "amountEngines=" + amountEngines +
+                ", name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                ", loadShip=" + loadShip +
+                '}';
+    }
+}
+
+import java.util.Objects;
+
+public class Auto extends Transport {
+    protected String serialNumber;
+    protected Driver[] drivers = new Driver[driverPlaces];
+
+    public Auto(String name, int fuelConsumption, int fuelCapacity, int maxSpeed, double speed, int driverPlaces,
+                String serialNumber) {
+        super(name, fuelConsumption, fuelCapacity, maxSpeed, speed, driverPlaces);
+
+        this.serialNumber = serialNumber;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Auto)) return false;
+        Auto auto = (Auto) o;
+        return Objects.equals(serialNumber, auto.serialNumber);
+    }
+
+    @Override
+    public boolean accelerate(int acceleratedSpeed) {
+        if (super.speed < 0) return false;
+        else if (super.speed > super.maxSpeed) return false;
+        else {
+            super.speed += acceleratedSpeed;
+            System.out.println("The speed has been increased by " + acceleratedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean brake(int reducedSpeed) {
+        if (super.speed < 0) return false;
+        else {
+            super.speed -= reducedSpeed;
+            System.out.println("The speed has been decreased by " + reducedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age) {
+        int count = 0;
+        if (count < drivers.length) {
+            Driver driver = new Driver(name, surname, patronymic, driverCategory, age);
+            drivers[count] = driver;
+            ++count;
+            System.out.println("The driver was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteDriver(int id) {
+        for (int i = 0; i < drivers.length - 1; i++) {
+            if (id == ++i) {
+                drivers[i] = new Driver();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Auto{" +
+                "serialNumber='" + serialNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                '}';
+    }
+}
+
+
+public interface BoardingPassengers {
+    boolean addPassenger(String name, String surname, String patronymic, int age);
+    boolean deletePassenger(int id);
+}
+
+
+public interface LoadingCargo {
+    boolean addCargo(double kg);
+}
+
+
+public class Plane extends Transport {
+    protected int amountEngines;
+    protected Driver[] drivers = new Driver[driverPlaces];
+
+    public Plane(String name, int fuelConsumption, int fuelCapacity, int maxSpeed, double speed,
+                 int driverPlaces, int amountEngines) {
+        super(name, fuelConsumption, fuelCapacity, maxSpeed, speed, driverPlaces);
+
+        this.amountEngines = amountEngines;
+    }
+
+    public int getAmountEngines() {
+        return amountEngines;
+    }
+
+    public void setAmountEngines(int amountEngines) {
+        this.amountEngines = amountEngines;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Plane)) return false;
+        Plane plane = (Plane) o;
+        return amountEngines == plane.amountEngines;
+    }
+
+    @Override
+    public boolean accelerate(int acceleratedSpeed) {
+        if (super.speed < 0) return false;
+        else if (super.speed > super.maxSpeed) return false;
+        else {
+            super.speed += acceleratedSpeed;
+            System.out.println("The speed has been increased by " + acceleratedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean brake(int reducedSpeed) {
+        if (super.speed < 0) return false;
+        else {
+            super.speed -= reducedSpeed;
+            System.out.println("The speed has been decreased by " + reducedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age) {
+        int count = 0;
+        if (count < drivers.length) {
+            Driver driver = new Driver(name, surname, patronymic, driverCategory, age);
+            drivers[count] = driver;
+            ++count;
+            System.out.println("The driver was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteDriver(int id) {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Plane{" +
+                "amountEngines=" + amountEngines +
+                ", name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                '}';
+    }
+}
+
+
+public class Ship extends Transport {
+    protected int amountEngines;
+    protected Driver[] drivers = new Driver[driverPlaces];
+
+    public Ship(String name, int fuelConsumption, int fuelCapacity, int maxSpeed, double speed,
+                int driverPlaces, int amountEngines) {
+        super(name, fuelConsumption, fuelCapacity, maxSpeed, speed, driverPlaces);
+
+        this.amountEngines = amountEngines;
+    }
+
+    public int getAmountEngines() {
+        return amountEngines;
+    }
+
+    public void setAmountEngines(int amountEngines) {
+        this.amountEngines = amountEngines;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ship ship)) return false;
+        return amountEngines == ship.amountEngines;
+    }
+
+    @Override
+    public boolean accelerate(int acceleratedSpeed) {
+        if (super.speed < 0) return false;
+        else if (super.speed > super.maxSpeed) return false;
+        else {
+            super.speed += acceleratedSpeed;
+            System.out.println("The speed has been increased by " + acceleratedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean brake(int reducedSpeed) {
+        if (super.speed < 0) return false;
+        else {
+            super.speed -= reducedSpeed;
+            System.out.println("The speed has been decreased by " + reducedSpeed + " km/h.");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age) {
+        int count = 0;
+
+
+        if (count < drivers.length) {
+            Driver driver = new Driver(name, surname, patronymic, driverCategory, age);
+            drivers[count] = driver;
+            ++count;
+            System.out.println("The driver was added successfully.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteDriver(int id) {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Ship{" +
+                "amountEngines=" + amountEngines +
+                ", name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                '}';
+    }
+}
+
+
+public abstract class Transport implements TransportImpl {
+    protected static int id;
+    protected String name;
+    protected int fuelConsumption;
+    protected int fuelCapacity;
+    protected double speed;
+    protected int maxSpeed;
+    protected int driverPlaces;
+
+    public Transport(String name, int fuelConsumption, int fuelCapacity, int maxSpeed,
+                     double speed, int driverPlaces) {
+        invokeID();
+        this.name = name;
+        this.fuelConsumption = fuelConsumption;
+        this.fuelCapacity = fuelCapacity;
+        this.maxSpeed = maxSpeed;
+        this.speed = speed;
+        this.driverPlaces = driverPlaces;
+    }
+
+    private static void invokeID() {
+        id++;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public static int getId() {
+        return id;
+    }
+
+    public static void setId(int id) {
+        Transport.id = id;
+    }
+
+    public int getFuelConsumption() {
+        return fuelConsumption;
+    }
+
+    public void setFuelConsumption(int fuelConsumption) {
+        this.fuelConsumption = fuelConsumption;
+    }
+
+    public int getFuelCapacity() {
+        return fuelCapacity;
+    }
+
+    public void setFuelCapacity(int fuelCapacity) {
+        this.fuelCapacity = fuelCapacity;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public int getPlaces() {
+        return driverPlaces;
+    }
+
+    public void setPlaces(int driverPlaces) {
+        this.driverPlaces = driverPlaces;
+    }
+
+    public int getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public void setMaxSpeed(int maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Transport)) return false;
+        Transport transport = (Transport) o;
+        return fuelConsumption == transport.fuelConsumption &&
+                fuelCapacity == transport.fuelCapacity && Double.compare(transport.speed, speed) == 0
+                && maxSpeed == transport.maxSpeed && driverPlaces == transport.driverPlaces
+                && Objects.equals(name, transport.name);
+    }
+
+    @Override
+    public String toString() {
+        return "Transport{" +
+                "name='" + name + '\'' +
+                ", fuelConsumption=" + fuelConsumption +
+                ", fuelCapacity=" + fuelCapacity +
+                ", speed=" + speed +
+                ", maxSpeed=" + maxSpeed +
+                ", driverPlaces=" + driverPlaces +
+                '}';
+    }
+}
+
+public interface TransportImpl {
+    boolean accelerate(int acceleratedSpeed);
+    boolean brake(int reducedSpeed);
+    boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age);
+    boolean deleteDriver(int id);
+}
+
+public interface TransportImpl {
+    boolean accelerate(int acceleratedSpeed);
+    boolean brake(int reducedSpeed);
+    boolean addDriver(String name, String surname, String patronymic, String driverCategory, int age);
+    boolean deleteDriver(int id);
+}
+
+public class TransportRun {
+
+    public static void main(String[] args) {
+
+        Random random = new Random();
+
+        /* Flying transport */
+
+        CargoPlane cargoPlane = new CargoPlane("Boeing 737", random.nextInt(100, 1000),
+                random.nextInt(10, 50), random.nextInt(600, 1000),
+                random.nextDouble(400, 700), random.nextInt(1, 3),
+                random.nextInt(1, 4), random.nextInt(5000, 15000));
+
+        Fighter fighter = new Fighter("Shuttle", random.nextInt(100, 1000),
+                random.nextInt(10, 50), random.nextInt(600, 1000),
+                random.nextDouble(400, 700), random.nextInt(1, 3),
+                random.nextInt(1, 4), "Missile", random.nextInt(1, 8));
+
+        PassengerPlane passengerPlane = new PassengerPlane("Mriya", random.nextInt(100, 1000),
+                random.nextInt(10, 50), random.nextInt(600, 1000),
+                random.nextDouble(400, 700), random.nextInt(1, 3),
+                random.nextInt(1, 4), random.nextInt(50, 80));
+
+        wrapper();
+        System.out.println(cargoPlane);
+        wrapper();
+        System.out.println(fighter);
+        wrapper();
+        System.out.println(passengerPlane);
+        wrapper();
+
+
+        /* Aquatic transport */
+
+        CargoShip cargoShip = new CargoShip("Boeing 737", random.nextInt(100, 1000),
+                random.nextInt(10, 50), random.nextInt(600, 1000),
+                random.nextDouble(400, 700), random.nextInt(1, 3),
+                random.nextInt(1, 4), random.nextInt(5000, 15000));
+        PassengerShip passengerShip = new PassengerShip("Boeing 737", random.nextInt(100, 1000),
+                random.nextInt(10, 50), random.nextInt(600, 1000),
+                random.nextDouble(400, 700), random.nextInt(1, 3),
+                random.nextInt(1, 4), random.nextInt(5000, 15000));
+        Tow tow = new Tow("Boeing 737", random.nextInt(100, 1000),
+                random.nextInt(10, 50), random.nextInt(600, 1000),
+                random.nextDouble(400, 700), random.nextInt(1, 3),
+                random.nextInt(1, 4), random.nextInt(5000, 15000), "Luggage");
+
+        wrapper();
+        System.out.println(cargoShip);
+        wrapper();
+        System.out.println(passengerShip);
+        wrapper();
+        System.out.println(tow);
+        wrapper();
+
+
+        /* Terrestrial transport */
+
+        Autobus autobus = new Autobus("Bogdan", random.nextInt(100, 1000),
+                random.nextInt(10, 50), random.nextInt(600, 1000),
+                random.nextDouble(400, 700), random.nextInt(1, 3),
+                generateSerialNumber(), random.nextInt(5000, 15000));
+        Car car = new Car("BMW", random.nextInt(100, 1000),
+                random.nextInt(10, 50), random.nextInt(600, 1000),
+                random.nextDouble(400, 700), random.nextInt(1, 3),
+                generateSerialNumber(), random.nextInt(5000, 15000));
+        CargoCar cargoCar = new CargoCar("Cargo", random.nextInt(100, 1000),
+                random.nextInt(10, 50), random.nextInt(600, 1000),
+                random.nextDouble(400, 700), random.nextInt(1, 3),
+                generateSerialNumber(), random.nextInt(5000, 15000));
+
+        wrapper();
+        System.out.println(autobus);
+        wrapper();
+        System.out.println(car);
+        wrapper();
+        System.out.println(cargoCar);
+        wrapper();
+
+    }
+
+    public static String generateSerialNumber() {
+        Random random = new Random();
+
+        StringBuilder serialNumber = new StringBuilder();
+        for(int i = 0; i < 16; i++) {
+            serialNumber.insert(i, random.nextInt(0, 9));
+        }
+        return serialNumber.toString();
+    }
+
+    public static void wrapper() {
+        for (int i = 0; i < 100; i++) {
+            System.out.print("-");
+        }
+        System.out.println();
+    }
+}
