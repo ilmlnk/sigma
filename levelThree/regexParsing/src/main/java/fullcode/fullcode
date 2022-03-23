@@ -1,0 +1,111 @@
+import java.io.*;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+class FileExtractor {
+    private File[] files;
+
+    public FileExtractor(File... files) {
+        this.files = files;
+    }
+
+    public File[] getFiles() {
+        return files;
+    }
+
+    public void setFiles(File[] files) {
+        this.files = files;
+    }
+
+    public boolean extractingData(int stringLengthLimit) {
+        String stringData;
+
+        try {
+            for (File f : files) {
+                if (f.exists()) {
+                    Scanner scanner = new Scanner(f);
+                    while (scanner.hasNextLine()) {
+                        stringData = scanner.nextLine();
+                        SentenceEditing.editString(stringData, stringLengthLimit);
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File is not found!");
+            return false;
+        }
+        return true;
+    }
+}
+
+
+class FileRecording {
+    private static final String FILEPATH = "/home/ilmlnk/IdeaProjects/Level3/src/files/selected";
+    private String recordData;
+
+    public FileRecording() {}
+
+    public String getRecordData() {
+        return recordData;
+    }
+
+    public void setRecordData(String recordData) {
+        this.recordData = recordData;
+    }
+
+    public static boolean fileRecord(String recordData) {
+        try (FileWriter writer = new FileWriter(FILEPATH, true)) {
+            writer.write(recordData + "\n");
+        } catch (IOException e) {
+            System.err.println("It is not possible to perform an operation with file!");
+            return false;
+        }
+        return true;
+    }
+}
+
+class SentenceEditing {
+    private String str;
+
+    public SentenceEditing() {}
+
+    public String getStr() {
+        return str;
+    }
+
+    public void setStr(String str) {
+        this.str = str;
+    }
+
+    public static void editString(String str, int lengthLimit) {
+        String buffer;
+        if (str.length() <= lengthLimit) {
+            Pattern pattern = Pattern.compile("\\b[aeiouyAEIOUY].+");
+            Matcher matcher = pattern.matcher(str);
+            while (matcher.find()) {
+                buffer = matcher.group();
+                FileRecording.fileRecord(buffer);
+            }
+        }
+    }
+}
+
+
+public class Dispatcher {
+    private static final String PATH_CHUNK = "/home/ilmlnk/IdeaProjects/Level3/src/files/";
+    public static void main(String[] args) {
+        File file1 = new File(PATH_CHUNK + "1");
+        File file2 = new File(PATH_CHUNK + "2");
+        File file3 = new File(PATH_CHUNK + "3");
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Input length limit for strings : ");
+        int limit = scanner.nextInt();
+
+        File[] files = {file1, file2, file3};
+        FileExtractor fileExtractor = new FileExtractor(files);
+        System.out.println("Extraction result : " +
+                ((fileExtractor.extractingData(limit)) ? "Success" : "Fail"));
+    }
+}
