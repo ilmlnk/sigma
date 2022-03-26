@@ -1,0 +1,432 @@
+package serial.dto;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import static serial.service.SerializeProcess.PATH;
+
+class Boat implements Serializable {
+    private int passengerAmount;
+    private String material;
+
+    public Boat(int passengerAmount, String material) {
+        this.passengerAmount = passengerAmount;
+        this.material = material;
+    }
+
+    public int getPassengerAmount() {
+        return passengerAmount;
+    }
+
+    public void setPassengerAmount(int passengerAmount) {
+        this.passengerAmount = passengerAmount;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(String material) {
+        this.material = material;
+    }
+
+    @Override
+    public String toString() {
+        return "Boat{" +
+                "passengerAmount=" + passengerAmount +
+                ", material='" + material + '\'' +
+                '}';
+    }
+}
+
+class Chassis {
+    private Wheel wheel;
+    private int wheelAmount;
+
+    public Chassis(Wheel wheel, int wheelAmount) {
+        this.wheel = wheel;
+        this.wheelAmount = wheelAmount;
+    }
+
+    public Wheel getWheel() {
+        return wheel;
+    }
+
+    public void setWheel(Wheel wheel) {
+        this.wheel = wheel;
+    }
+
+    public int getWheelAmount() {
+        return wheelAmount;
+    }
+
+    public void setWheelAmount(int wheelAmount) {
+        this.wheelAmount = wheelAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "Chassis{" +
+                "wheel=" + wheel +
+                ", wheelAmount=" + wheelAmount +
+                '}';
+    }
+}
+
+class Engine {
+    private String type;
+    private int power;
+
+    public Engine(String type, int power) {
+        this.type = type;
+        this.power = power;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    @Override
+    public String toString() {
+        return "Engine{" +
+                "type='" + type + '\'' +
+                ", power=" + power +
+                '}';
+    }
+}
+
+class Plane extends Transport implements Serializable {
+    private String model;
+    private int flyingRange;
+    transient private Chassis chassis;
+
+    public Plane() {}
+
+    public Plane(int velocity, int productionYear, Engine engine,
+                 String model, int flyingRange, Chassis chassis) {
+        super(velocity, productionYear, engine);
+        this.model = model;
+        this.flyingRange = flyingRange;
+        this.chassis = chassis;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public int getFlyingRange() {
+        return flyingRange;
+    }
+
+    public void setFlyingRange(int flyingRange) {
+        this.flyingRange = flyingRange;
+    }
+
+    public Chassis getChassis() {
+        return chassis;
+    }
+
+    public void setChassis(Chassis chassis) {
+        this.chassis = chassis;
+    }
+
+    @Override
+    public String toString() {
+        return "Plane{" +
+                "model='" + model + '\'' +
+                ", flyingRange=" + flyingRange +
+                ", chassis=" + chassis +
+                ", velocity=" + velocity +
+                ", productionYear=" + productionYear +
+                ", engine=" + engine +
+                '}';
+    }
+}
+
+class Ship extends Transport implements Externalizable {
+    private int waterWeight;
+    private double length;
+    private Boat boat;
+
+    public Ship() {}
+
+    public Ship(int velocity, int productionYear, Engine engine,
+                int waterWeight, double length, Boat boat) {
+        super(velocity, productionYear, engine);
+
+        this.waterWeight = waterWeight;
+        this.length = length;
+        this.boat = boat;
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeInt(waterWeight);
+        out.writeDouble(length);
+        out.writeObject(boat);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        this.waterWeight = in.readInt();
+        this.length = in.readDouble();
+        this.boat = (Boat) in.readObject();
+    }
+
+    public int getWaterWeight() {
+        return waterWeight;
+    }
+
+    public void setWaterWeight(int waterWeight) {
+        this.waterWeight = waterWeight;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public void setLength(double length) {
+        this.length = length;
+    }
+
+    public Boat getBoat() {
+        return boat;
+    }
+
+    public void setBoat(Boat boat) {
+        this.boat = boat;
+    }
+
+    @Override
+    public String toString() {
+        return "Ship{" +
+                "waterWeight=" + waterWeight +
+                ", length=" + length +
+                ", boat=" + boat +
+                ", velocity=" + velocity +
+                ", productionYear=" + productionYear +
+                ", engine=" + engine +
+                '}';
+    }
+}
+
+class Transport {
+    protected int velocity;
+    protected int productionYear;
+    protected Engine engine;
+
+    public Transport() {}
+
+    public Transport(int velocity, int productionYear, Engine engine) {
+        this.velocity = velocity;
+        this.productionYear = productionYear;
+        this.engine = engine;
+    }
+
+    public int getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(int velocity) {
+        this.velocity = velocity;
+    }
+
+    public int getProductionYear() {
+        return productionYear;
+    }
+
+    public void setProductionYear(int productionYear) {
+        this.productionYear = productionYear;
+    }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+
+    @Override
+    public String toString() {
+        return "Transport{" +
+                "velocity=" + velocity +
+                ", productionYear=" + productionYear +
+                ", engine=" + engine +
+                '}';
+    }
+}
+
+class Wheel {
+    private int load;
+    private int diameter;
+
+    public Wheel(int load, int diameter) {
+        this.load = load;
+        this.diameter = diameter;
+    }
+
+    public int getLoad() {
+        return load;
+    }
+
+    public void setLoad(int load) {
+        this.load = load;
+    }
+
+    public int getDiameter() {
+        return diameter;
+    }
+
+    public void setDiameter(int diameter) {
+        this.diameter = diameter;
+    }
+
+    @Override
+    public String toString() {
+        return "Wheel{" +
+                "load=" + load +
+                ", diameter=" + diameter +
+                '}';
+    }
+}
+
+class ArrayListPackaging implements Serializable {
+
+    public static void arrayListPackaging(Object... objects) {
+        ArrayList<Plane> planes = new ArrayList<>();
+        ArrayList<Ship> ships = new ArrayList<>();
+
+        for (Object o : objects) {
+            if (o instanceof Plane) {
+                planes.add((Plane) o);
+            } else if (o instanceof Ship) {
+                ships.add((Ship) o);
+            } else {
+                System.out.println("Object " + o + "is not an instance of Plane or Ship.");
+                throw new RuntimeException();
+            }
+        }
+        planes.stream()
+                .sorted(Comparator.comparing(Plane::getProductionYear));
+        System.out.println(planes);
+        ships.stream()
+                .sorted(Comparator.comparing(Ship::getProductionYear));
+
+        SerializeProcess.serialize(planes);
+        ExternalizeProcess.externalize(ships);
+    }
+}
+
+class DeSerializeProcess {
+    private static final String FILEPATH = "planeSerialize";
+
+    public static boolean deserialize() {
+        ArrayList<Plane> deserializeList = new ArrayList<>();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(PATH + FILEPATH))) {
+            deserializeList.add((Plane) ois.readObject());
+            System.out.println(deserializeList);
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("It is not possible to perform operations with deserialization!");
+            return false;
+        }
+        return true;
+    }
+}
+
+class ExternalizeProcess {
+    private static final String FILEPATH = "externalizeShip";
+
+    public static void externalize(ArrayList<Ship> shipList) {
+        ArrayList<Ship> externalizedList = new ArrayList<>();
+        try {
+            FileOutputStream fo = new FileOutputStream(PATH + FILEPATH);
+            ObjectOutputStream so = new ObjectOutputStream(fo);
+            for (Ship s : shipList) {
+                so.writeObject(s);
+                so.flush();
+            }
+
+            FileInputStream fis = new FileInputStream(PATH + FILEPATH);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            externalizedList.add((Ship) ois.readObject());
+
+            System.out.println(shipList);
+            System.out.println(externalizedList);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.err.println("It is not possible to perform operations with externalization!");
+        }
+    }
+}
+
+
+class SerializeProcess implements Serializable {
+    protected static final String PATH = "/home/ilmlnk/IdeaProjects/Level3/src/main/java/serial/serialfiles";
+    private static final String FILEPATH = "planeSerialize";
+
+    public static boolean serialize(ArrayList<Plane> planeList) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(PATH + FILEPATH))){
+            for (Plane p : planeList) {
+                oos.writeObject(p);
+            }
+            DeSerializeProcess.deserialize();
+        } catch (IOException e) {
+            System.err.println("It is not possible to perform serialization!");
+            return false;
+        }
+        return true;
+    }
+}
+
+public class Run {
+    public static void main(String[] args) {
+        Object[] objects;
+
+        Engine engine1 = new Engine("Diesel", 200);
+        Engine engine2 = new Engine("95", 400);
+        Engine engine3 = new Engine("Cruise", 350);
+        /* int load,
+        int diameter */
+        Wheel wheel1 = new Wheel(1000, 20);
+        Wheel wheel2 = new Wheel(1500, 30);
+        /* Wheel wheel,
+        int wheelAmount */
+        Chassis chassis1 = new Chassis(wheel1, 4);
+        Chassis chassis2 = new Chassis(wheel2, 6);
+        /* int passengerAmount,
+        String material */
+        Boat boat1 = new Boat(150, "Metal");
+
+        /* int velocity, int productionYear, Engine engine,
+                 String model, int flyingRange, Chassis chassis */
+        Plane plane1 = new Plane(500, 2003, engine1,
+                "Boeing", 20000, chassis1);
+        Plane plane2 = new Plane(600, 2005, engine2,
+                "Boeing 737", 20000, chassis2);
+        /* int velocity, int productionYear, Engine engine,
+                int waterWeight, double length, Boat boat */
+        Ship ship1 = new Ship(50, 2005, engine3,
+                5000, 125.5, boat1);
+
+        objects = new Object[]{plane1, plane2, ship1};
+        ArrayListPackaging.arrayListPackaging(objects);
+    }
+}
+
