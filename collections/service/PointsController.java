@@ -9,9 +9,9 @@ public class PointsController {
     private static int belongingCount;
     private static int intersectionCount;
 
-    public static String pointMapping(Point point, Line... lines) {
+    public static void pointMapping(Point point, Line... lines) {
         HashMap<Point, Integer> pointMap = new HashMap<>();
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer notFoundLines = new StringBuffer();
         for (Line line : lines) {
             if (((line.getK() * point.getX() + line.getB()) == point.getY())) {
                 belongingCount++;
@@ -19,20 +19,20 @@ public class PointsController {
                     intersectionCount++;
                 }
             } else {
-                stringBuffer.append(line).append("\n");
+                notFoundLines.append(line).append("\n");
             }
         }
 
-        if(!stringBuffer.isEmpty()) {
-            System.err.println("Intersections were not found : \n" + stringBuffer);
+        if (!notFoundLines.isEmpty()) {
+            System.err.println("Intersections were not found : \n" + notFoundLines);
+        }
+
+        if (intersectionCount > 0) {
+            System.out.println("Intersections were found : " + intersectionCount + "!");
         }
 
         pointMap.put(point, intersectionCount);
-        System.out.println("Intersections were found : " + intersectionCount + "!");
-
         intersectionCount = 0;
-        String pointMapData = pointMap.toString();
-        RecordData.recordCalculations(pointMapData);
-        return pointMapData;
+        RecordData.recordCalculations(pointMap);
     }
 }

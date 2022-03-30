@@ -31,12 +31,12 @@ public class Run {
         Line[] lines = new Line[]{l1, l2, l3, l4};
         Point[] points = new Point[]{p1, p2};
 
-        System.out.println(PointsController.pointMapping(p1, lines));
-        System.out.println(PointsController.pointMapping(p2, lines));
+        PointsController.pointMapping(p1, lines);
+        PointsController.pointMapping(p2, lines);
 
         System.out.println();
-        System.out.println(LinearEquationController.pointBelongingToLine(l1, points));
-        System.out.println(LinearEquationController.pointBelongingToLine(l2, points));
+        LinearEquationController.pointBelongingToLine(l1, points);
+        LinearEquationController.pointBelongingToLine(l2, points);
         System.out.println();
     }
 }

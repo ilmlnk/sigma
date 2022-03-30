@@ -1,6 +1,8 @@
 package collections.dto;
 
-public class Line {
+import java.io.Serializable;
+
+public class Line implements Serializable {
     private int k;
     private int b;
 
