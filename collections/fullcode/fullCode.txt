@@ -130,4 +130,76 @@ class ExtractData {
     }
 }
 
+class Point implements Serializable {
+    private int x;
+    private int y;
+
+    public Point() {
+        this(0, 0);
+    }
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    @Override
+    public String toString() {
+        return "Point (" +
+                "x = " + x +
+                ", y = " + y +
+                ')';
+    }
+}
+
+class Line implements Serializable {
+    private int k;
+    private int b;
+
+    public Line(int k, int b) {
+        this.k = k;
+        this.b = b;
+    }
+
+    public int getK() {
+        return k;
+    }
+
+    public void setK(int k) {
+        this.k = k;
+    }
+
+    public int getB() {
+        return b;
+    }
+
+    public void setB(int b) {
+        this.b = b;
+    }
+
+    @Override
+    public String toString() {
+        return "Line(" +
+                "k=" + k +
+                ", b=" + b +
+                ')';
+    }
+}
+
 
