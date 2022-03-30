@@ -11,7 +11,6 @@
  *
  * */
 
-
 package collections;
 
 import java.util.*;
@@ -32,49 +31,51 @@ public class Run {
         Line[] lines = new Line[]{l1, l2, l3, l4};
         Point[] points = new Point[]{p1, p2};
 
-        System.out.println(PointsController.pointMapping(p1, lines));
-        System.out.println(PointsController.pointMapping(p2, lines));
+        PointsController.pointMapping(p1, lines);
+        PointsController.pointMapping(p2, lines);
 
         System.out.println();
-        System.out.println(LinearEquationController.pointBelongingToLine(l1, points));
-        System.out.println(LinearEquationController.pointBelongingToLine(l2, points));
+        LinearEquationController.pointBelongingToLine(l1, points);
+        LinearEquationController.pointBelongingToLine(l2, points);
         System.out.println();
     }
 }
 
 class LinearEquationController {
     private static int belongingCount;
-    public static String pointBelongingToLine(Line line, Point... points) {
-        StringBuffer stringBuffer = new StringBuffer();
+    public static void pointBelongingToLine(Line line, Point... points) {
+        StringBuffer notFoundPoints = new StringBuffer();
         HashMap<Line, Integer> lineMap = new HashMap<>();
         for (Point point : points) {
             if ((line.getK() * point.getX() + line.getB()) == point.getY()) {
                 belongingCount++;
             } else {
-                stringBuffer.append(point).append("\n");
+                notFoundPoints.append(point).append("\n");
             }
         }
-        if (!stringBuffer.isEmpty()) {
-            System.err.println("Intersections were not found in lines : \n" + stringBuffer);
+        if (!notFoundPoints.isEmpty()) {
+            System.err.println("Intersections were not found in lines : \n" + notFoundPoints);
         }
 
+        if (belongingCount > 0) {
+            System.out.println("Amount of points which are on line: " + belongingCount);
+        }
         lineMap.put(line, belongingCount);
-        System.out.println("Amount of points which are on line: " + belongingCount);
 
         belongingCount = 0;
-        String lineMapData = lineMap.toString();
-        RecordData.recordCalculations(lineMapData);
-        return lineMapData;
+        String lineMapStringData = lineMap.toString();
+        RecordData.recordCalculations(lineMapStringData);
     }
 }
+
 
 class PointsController {
     private static int belongingCount;
     private static int intersectionCount;
 
-    public static String pointMapping(Point point, Line... lines) {
+    public static void pointMapping(Point point, Line... lines) {
         HashMap<Point, Integer> pointMap = new HashMap<>();
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer notFoundLines = new StringBuffer();
         for (Line line : lines) {
             if (((line.getK() * point.getX() + line.getB()) == point.getY())) {
                 belongingCount++;
@@ -82,21 +83,22 @@ class PointsController {
                     intersectionCount++;
                 }
             } else {
-                stringBuffer.append(line).append("\n");
+                notFoundLines.append(line).append("\n");
             }
         }
 
-        if(!stringBuffer.isEmpty()) {
-            System.err.println("Intersections were not found : \n" + stringBuffer);
+        if (!notFoundLines.isEmpty()) {
+            System.err.println("Intersections were not found : \n" + notFoundLines);
+        }
+
+        if (intersectionCount > 0) {
+            System.out.println("Intersections were found : " + intersectionCount + "!");
         }
 
         pointMap.put(point, intersectionCount);
-        System.out.println("Intersections were found : " + intersectionCount + "!");
-
         intersectionCount = 0;
-        String pointMapData = pointMap.toString();
-        RecordData.recordCalculations(pointMapData);
-        return pointMapData;
+        String pointMapStringData = pointMap.toString();
+        RecordData.recordCalculations(pointMapStringData);
     }
 }
 
