@@ -81,10 +81,6 @@ class PointsController {
             System.err.println("Intersections were not found : \n" + notFoundLines);
         }
 
-        if (intersectionCount > 0) {
-            System.out.println("Intersections were found : " + intersectionCount + "!");
-        }
-
         pointMap.put(point, intersectionCount);
         intersectionCount = 0;
         RecordData.recordCalculations(pointMap);
@@ -107,9 +103,6 @@ class LinearEquationController {
             System.err.println("Intersections were not found in lines : \n" + notFoundPoints);
         }
 
-        if (belongingCount > 0) {
-            System.out.println("Amount of points which are on line: " + belongingCount);
-        }
         lineMap.put(line, belongingCount);
 
         belongingCount = 0;
