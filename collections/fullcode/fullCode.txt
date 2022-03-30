@@ -13,10 +13,8 @@
 
 package collections;
 
+import java.io.*;
 import java.util.*;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class Run {
     public static void main(String[] args) {
@@ -41,30 +39,22 @@ public class Run {
     }
 }
 
-class LinearEquationController {
-    private static int belongingCount;
-    public static void pointBelongingToLine(Line line, Point... points) {
-        StringBuffer notFoundPoints = new StringBuffer();
-        HashMap<Line, Integer> lineMap = new HashMap<>();
-        for (Point point : points) {
-            if ((line.getK() * point.getX() + line.getB()) == point.getY()) {
-                belongingCount++;
-            } else {
-                notFoundPoints.append(point).append("\n");
-            }
-        }
-        if (!notFoundPoints.isEmpty()) {
-            System.err.println("Intersections were not found in lines : \n" + notFoundPoints);
-        }
 
-        if (belongingCount > 0) {
-            System.out.println("Amount of points which are on line: " + belongingCount);
-        }
-        lineMap.put(line, belongingCount);
 
-        belongingCount = 0;
-        String lineMapStringData = lineMap.toString();
-        RecordData.recordCalculations(lineMapStringData);
+class RecordData {
+    protected static final String FILE_DIRECTORY = "/home/ilmlnk/IdeaProjects/Level3/src/main/java/collections/files/";
+    protected static final String FILE_LOCATION = "LINES";
+
+    public static boolean recordCalculations(Object object) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(FILE_DIRECTORY + FILE_LOCATION)) {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(object);
+            ExtractData.extractCalculations();
+        } catch (IOException e) {
+            System.err.println("It is not possible to record data into file!");
+            return false;
+        }
+        return true;
     }
 }
 
@@ -97,22 +87,47 @@ class PointsController {
 
         pointMap.put(point, intersectionCount);
         intersectionCount = 0;
-        String pointMapStringData = pointMap.toString();
-        RecordData.recordCalculations(pointMapStringData);
+        RecordData.recordCalculations(pointMap);
     }
 }
 
-class RecordData {
-    private static final String FILE_DIRECTORY = "/home/ilmlnk/IdeaProjects/Level3/src/main/java/collections/files/";
-    private static final String FILE_LOCATION = "LINES";
-
-    public static boolean recordCalculations(String data) {
-        File f1 = new File(FILE_DIRECTORY + FILE_LOCATION);
-        try (FileWriter fileWriter = new FileWriter(f1, true)) {
-            fileWriter.write(data + "\n");
-        } catch (IOException e) {
-            System.err.println("It is not possible to record data into file!");
+class LinearEquationController {
+    private static int belongingCount;
+    public static void pointBelongingToLine(Line line, Point... points) {
+        StringBuffer notFoundPoints = new StringBuffer();
+        HashMap<Line, Integer> lineMap = new HashMap<>();
+        for (Point point : points) {
+            if ((line.getK() * point.getX() + line.getB()) == point.getY()) {
+                belongingCount++;
+            } else {
+                notFoundPoints.append(point).append("\n");
+            }
         }
-        return true;
+        if (!notFoundPoints.isEmpty()) {
+            System.err.println("Intersections were not found in lines : \n" + notFoundPoints);
+        }
+
+        if (belongingCount > 0) {
+            System.out.println("Amount of points which are on line: " + belongingCount);
+        }
+        lineMap.put(line, belongingCount);
+
+        belongingCount = 0;
+        RecordData.recordCalculations(lineMap);
     }
 }
+
+class ExtractData {
+    public static void extractCalculations() {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(FILE_DIRECTORY + FILE_LOCATION);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            HashMap<Point, Integer> extractedPointMap = (HashMap<Point, Integer>) objectInputStream.readObject();
+            System.out.println(extractedPointMap);
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("It is not possible to perform operation!");
+        }
+    }
+}
+
+
