@@ -1,129 +1,54 @@
-/*
- *
- * todo: На площині задано N точок. Необхідно у файл LINES записати два HashMap:
- *   - із ключами у вигляді об’єктів класу Point, що визначаються цілими координатами
- *     точок, та значеннями у вигляді кількості прямих, що проходять через цю точку та, щонайменше,
- *     ще через одну точку,
- *   - із ключами у вигляді об’єктів класу Line, що визначаються параметрами К та В
- *     прямої y = K*x + B, та значеннями у вигляді кількості точок, що належать цій прямій.
- *
- *
- *
- * */
-
-package collections;
+package collections.dto;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
 
-public class Run {
-    public static void main(String[] args) {
-        Point p1 = new Point(0, 4);
-        Point p2 = new Point(1, 6);
+public abstract class GeometricComponent implements Serializable {}
 
-        Line l1 = new Line(2, 4);
-        Line l2 = new Line(-2, 4);
-        Line l3 = new Line(5, 10);
-        Line l4 = new Line(10, 10);
+public class Line extends GeometricComponent {
+    private double k;
+    private double b;
+    private int intersectionCount;
 
-        Line[] lines = new Line[]{l1, l2, l3, l4};
-        Point[] points = new Point[]{p1, p2};
+    public Line(double k, double b) {
+        this.k = k;
+        this.b = b;
+    }
 
-        PointsController.pointMapping(p1, lines);
-        PointsController.pointMapping(p2, lines);
+    public double getK() {
+        return k;
+    }
 
-        System.out.println();
-        LinearEquationController.pointBelongingToLine(l1, points);
-        LinearEquationController.pointBelongingToLine(l2, points);
-        System.out.println();
+    public double getB() {
+        return b;
+    }
+
+    public void setK(double k) {
+        this.k = k;
+    }
+
+    public void setB(double b) {
+        this.b = b;
+    }
+
+    public int getIntersectionCount() {
+        return intersectionCount;
+    }
+
+    public void setIntersectionCount(int intersectionCount) {
+        this.intersectionCount = intersectionCount;
+    }
+
+    @Override
+    public String toString() {
+        return "Line(" +
+                    "k=" + k +
+                    ", b=" + b +
+                    ')';
     }
 }
 
-
-
-class RecordData {
-    protected static final String FILE_DIRECTORY = "/home/ilmlnk/IdeaProjects/Level3/src/main/java/collections/files/";
-    protected static final String FILE_LOCATION = "LINES";
-
-    public static boolean recordCalculations(Object object) {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(FILE_DIRECTORY + FILE_LOCATION)) {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(object);
-            ExtractData.extractCalculations();
-        } catch (IOException e) {
-            System.err.println("It is not possible to record data into file!");
-            return false;
-        }
-        return true;
-    }
-}
-
-
-class PointsController {
-    private static int belongingCount;
-    private static int intersectionCount;
-
-    public static void pointMapping(Point point, Line... lines) {
-        HashMap<Point, Integer> pointMap = new HashMap<>();
-        StringBuffer notFoundLines = new StringBuffer();
-        for (Line line : lines) {
-            if (((line.getK() * point.getX() + line.getB()) == point.getY())) {
-                belongingCount++;
-                if (belongingCount >= 2) {
-                    intersectionCount++;
-                }
-            } else {
-                notFoundLines.append(line).append("\n");
-            }
-        }
-
-        if (!notFoundLines.isEmpty()) {
-            System.err.println("Intersections were not found : \n" + notFoundLines);
-        }
-
-        pointMap.put(point, intersectionCount);
-        intersectionCount = 0;
-        RecordData.recordCalculations(pointMap);
-    }
-}
-
-class LinearEquationController {
-    private static int belongingCount;
-    public static void pointBelongingToLine(Line line, Point... points) {
-        StringBuffer notFoundPoints = new StringBuffer();
-        HashMap<Line, Integer> lineMap = new HashMap<>();
-        for (Point point : points) {
-            if ((line.getK() * point.getX() + line.getB()) == point.getY()) {
-                belongingCount++;
-            } else {
-                notFoundPoints.append(point).append("\n");
-            }
-        }
-        if (!notFoundPoints.isEmpty()) {
-            System.err.println("Intersections were not found in lines : \n" + notFoundPoints);
-        }
-
-        lineMap.put(line, belongingCount);
-
-        belongingCount = 0;
-        RecordData.recordCalculations(lineMap);
-    }
-}
-
-class ExtractData {
-    public static void extractCalculations() {
-        try {
-            FileInputStream fileInputStream = new FileInputStream(FILE_DIRECTORY + FILE_LOCATION);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            HashMap<Point, Integer> extractedPointMap = (HashMap<Point, Integer>) objectInputStream.readObject();
-            System.out.println(extractedPointMap);
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("It is not possible to perform operation!");
-        }
-    }
-}
-
-class Point implements Serializable {
+public class Point extends GeometricComponent {
     private int x;
     private int y;
 
@@ -161,38 +86,139 @@ class Point implements Serializable {
     }
 }
 
-class Line implements Serializable {
-    private int k;
-    private int b;
 
-    public Line(int k, int b) {
-        this.k = k;
-        this.b = b;
-    }
 
-    public int getK() {
-        return k;
-    }
+import java.util.HashMap;
 
-    public void setK(int k) {
-        this.k = k;
-    }
+import static collections.service.RecordData.FILE_DIRECTORY;
+import static collections.service.RecordData.FILE_LOCATION;
 
-    public int getB() {
-        return b;
-    }
-
-    public void setB(int b) {
-        this.b = b;
-    }
-
-    @Override
-    public String toString() {
-        return "Line(" +
-                "k=" + k +
-                ", b=" + b +
-                ')';
+public class ExtractData {
+    public static void extractCalculations() {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(FILE_DIRECTORY + FILE_LOCATION);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            HashMap<Point, Integer> extractedPointMap = (HashMap<Point, Integer>) objectInputStream.readObject();
+            System.out.println(extractedPointMap);
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("It is not possible to perform operation!");
+        }
     }
 }
 
 
+
+public class LinearEquationController {
+    private static int belongingCount;
+    public static void pointBelongingToLine(Line line, Point... points) {
+        StringBuilder notFoundPoints = new StringBuilder();
+        HashMap<Line, Integer> lineMap = new HashMap<>();
+        for (Point point : points) {
+            int equation = (int) (line.getK() * point.getX() + line.getB());
+            if (equation == point.getY()) {
+                belongingCount++;
+            } else {
+                notFoundPoints.append(point).append("\n");
+            }
+        }
+        if (!notFoundPoints.isEmpty()) {
+            System.err.println("Intersections were not found in lines : \n" + notFoundPoints);
+        }
+
+        if (belongingCount > 0) {
+            System.out.println("Amount of points which are on line: " + belongingCount);
+        }
+        lineMap.put(line, belongingCount);
+
+        belongingCount = 0;
+        RecordData.recordCalculations(lineMap);
+    }
+}
+
+public class PointsController {
+
+    private static int intersectionCount;
+    private static int belongingCount;
+    public static void pointMapping(Point point, Line... lines) {
+        HashMap<Point, Integer> pointMap = new HashMap<>();
+        StringBuilder notFoundLines = new StringBuilder();
+
+        for (Line line : lines) {
+            int equation = (int) (line.getK() * point.getX() + line.getB());
+            if (equation == point.getY()) {
+
+                intersectionCount++;
+                line.setIntersectionCount(intersectionCount);
+
+                if (intersectionCount >= 2) {
+                    pointMap.put(point, intersectionCount);
+                }
+            } else {
+                notFoundLines.append(line).append("\n");
+            }
+        }
+        if (!notFoundLines.isEmpty()) {
+            System.err.println("Intersections were not found : \n" + notFoundLines);
+        }
+
+        System.out.println("Intersections were found : " + intersectionCount + "!");
+        RecordData.recordCalculations(pointMap);
+    }
+}
+
+
+public class RecordData {
+    protected static final String FILE_DIRECTORY = "C:\\Users\\ilmln\\IdeaProjects\\Level3\\src\\main\\java\\" +
+            "collections\\files";
+    protected static final String FILE_LOCATION = "\\LINES";
+
+    public static boolean recordCalculations(Object object) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(FILE_DIRECTORY + FILE_LOCATION)) {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(object);
+            ExtractData.extractCalculations();
+        } catch (IOException e) {
+            System.err.println("It is not possible to record data into file!");
+            return false;
+        }
+        return true;
+    }
+}
+
+/*
+ *
+ * todo: На площині задано N точок. Необхідно у файл LINES записати два HashMap:
+ *   - із ключами у вигляді об’єктів класу Point, що визначаються цілими координатами
+ *     точок, та значеннями у вигляді кількості прямих, що проходять через цю точку та, щонайменше,
+ *     ще через одну точку,
+ *   - із ключами у вигляді об’єктів класу Line, що визначаються параметрами К та В
+ *     прямої y = K*x + B, та значеннями у вигляді кількості точок, що належать цій прямій.
+ *
+ *
+ *
+ * */
+
+public class Run {
+    public static void main(String[] args) {
+        Point p1 = new Point(0, 4);
+        Point p2 = new Point(1, 6);
+
+        Line l1 = new Line(2, 4);
+        Line l2 = new Line(-2, 4);
+        Line l5 = new Line(-2, 4);
+        Line l3 = new Line(5, 10);
+        Line l4 = new Line(10, 10);
+
+        Line[] lines = new Line[]{l1, l2, l3, l4, l5};
+        Point[] points = new Point[]{p1, p2};
+
+        PointsController.pointMapping(p1, lines);
+        System.out.println();
+        System.out.println("-".repeat(20));
+
+        for (Line l : lines) {
+            LinearEquationController.pointBelongingToLine(l, points);
+            System.out.println();
+        }
+    }
+}
