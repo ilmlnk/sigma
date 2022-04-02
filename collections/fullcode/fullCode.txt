@@ -2,6 +2,7 @@ package collections.dto;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class GeometricComponent implements Serializable {}
 
@@ -104,7 +105,7 @@ public class ExtractData {
 
 public class LinearEquationController {
     private static int belongingCount;
-    public static void pointBelongingToLine(Line line, Point... points) {
+   public static void pointBelongingToLine(Line line, List<Point> points) {
         StringBuilder notFoundPoints = new StringBuilder();
         HashMap<Line, Integer> lineMap = new HashMap<>();
         for (Point point : points) {
@@ -133,7 +134,7 @@ public class PointsController {
 
     private static int intersectionCount;
     private static int belongingCount;
-    public static void pointMapping(Point point, Line... lines) {
+    public static void pointMapping(Point point, List<Line> lines) {
         HashMap<Point, Integer> pointMap = new HashMap<>();
         StringBuilder notFoundLines = new StringBuilder();
 
@@ -203,8 +204,8 @@ public class Run {
         Line l3 = new Line(5, 10);
         Line l4 = new Line(10, 10);
 
-        Line[] lines = new Line[]{l1, l2, l3, l4, l5};
-        Point[] points = new Point[]{p1, p2};
+        List<Line> lines = List.of(l1, l2, l3, l4, l5);
+        List<Point> points = List.of(p1, p2);
 
         PointsController.pointMapping(p1, lines);
         System.out.println();
