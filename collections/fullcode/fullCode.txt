@@ -87,12 +87,6 @@ public class Point extends GeometricComponent {
 }
 
 
-
-import java.util.HashMap;
-
-import static collections.service.RecordData.FILE_DIRECTORY;
-import static collections.service.RecordData.FILE_LOCATION;
-
 public class ExtractData {
     public static void extractCalculations() {
         try {
