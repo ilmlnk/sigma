@@ -4,21 +4,21 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 class StreamController {
-    public static List<String> streamCapitalization(String text) {
+    public static String streamCapitalization(String text) {
         String[] words = text.split(" ");
 
         return Arrays.stream(words)
                 .map(s -> Character.toUpperCase(s.charAt(0)) + s.substring(1).replaceAll("[,.?!]", ""))
-                .toList();
+                .collect(Collectors.joining(" "));
     }
 
-    public static List<String> streamSortedSentences(String text) {
+    public static String streamSortedSentences(String text) {
         String[] words = text.split("[,.!?]");
 
         return Arrays.stream(words)
                 .map(s -> s.replaceAll("[,.?!]", "").replaceAll("^ ", ""))
                 .sorted(Comparator.comparing(String::length))
-                .toList();
+                .collect(Collectors.joining(" "));
     }
 
     public static Map<Boolean, List<Integer>> streamSeparatedNumbers(ArrayList<Integer> integers) {
