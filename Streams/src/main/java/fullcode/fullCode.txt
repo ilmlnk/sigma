@@ -18,7 +18,7 @@ class StreamController {
         return Arrays.stream(words)
                 .map(s -> s.replaceAll("[,.?!]", "").replaceAll("^ ", ""))
                 .sorted(Comparator.comparing(String::length))
-                .collect(Collectors.joining(" "));
+                .collect(Collectors.joining(". "));
     }
 
     public static Map<Boolean, List<Integer>> streamSeparatedNumbers(ArrayList<Integer> integers) {
