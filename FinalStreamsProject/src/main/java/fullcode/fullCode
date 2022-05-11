@@ -76,7 +76,7 @@ class FileProcessingHandler implements Runnable {
         try {
             System.out.println("[File " + file.getName() + "] : Total word count : " + wordCount + " words");
             System.out.println("[File " + file.getName() + "] : Average word length : " +
-                    averageWordLength);
+                    String.format("%.2f", averageWordLength));
         } catch (NullPointerException e) {
             System.out.println();
         }
