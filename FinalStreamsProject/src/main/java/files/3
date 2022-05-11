@@ -1,0 +1,18 @@
+/*private void output() {
+        try {
+            synchronized (this) {
+                System.out.println("[File " + file.getName() + "] : Total word count : " + wordCount + " words");
+                System.out.println("[File " + file.getName() + "] : Average word length : " + averageWordLength);
+            }
+        } catch (NullPointerException e) {
+            System.out.println();
+        }
+    }
+
+    private synchronized double countAverageWordLength() {
+        return totalWordLength / (double) wordCount;
+    }
+
+    private synchronized void countTotalWordLength(String word) {
+        totalWordLength += word.length();
+    }*/

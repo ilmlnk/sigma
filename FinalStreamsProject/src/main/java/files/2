@@ -1,0 +1,21 @@
+/*try (Stream<String> streamCountWords = Files.lines(Paths.get(file.toURI()))) {
+            wordCount = streamCountWords
+                    .flatMap(word -> Arrays.stream(word.split("\\s+")))
+                    .distinct()
+                    .count();
+
+        } catch (IOException e) {
+            System.out.println("No files left for processing in directory!");
+        }*/
+        /*try (Stream<String> streamCountWords = Files.lines(Paths.get(file.toURI()))) {
+            wordCount = streamCountWords
+                    .flatMap(word -> Arrays.stream(word.split("\\s+")))
+                    .distinct()
+                    .count();
+
+        } catch (IOException | NullPointerException e) {
+            System.out.println("No files left for processing in directory!");
+        }*/
+
+        /*averageWordLength = countAverageWordLength();
+        output();*/

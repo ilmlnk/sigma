@@ -1,0 +1,25 @@
+/*String wordBuffer;
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNext()) {
+                wordBuffer = scanner.next();
+                countTotalWordLength(wordBuffer);
+            }
+            double averageWordLength = countAverageWordLength();
+            System.out.println("[File " + file.getName() + "] : " + "Average word length: " + averageWordLength);
+        } catch (IOException | NullPointerException e) {
+            e.printStackTrace();
+            System.out.println("Files are over for processing!");
+        }*/
+
+        /*try (Scanner scanner = new Scanner(file)) {
+                    while (scanner.hasNext()) {
+                        wordBuffer = scanner.next();
+                        wordCount = wordCount + 1;
+                        totalWordLength = totalWordLength + wordBuffer.length();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
+
+                /*fileProcessing(file);
+                        System.out.println("[File " + file.getName() + "] : Average word length : " + countAverageWordLength());*/
